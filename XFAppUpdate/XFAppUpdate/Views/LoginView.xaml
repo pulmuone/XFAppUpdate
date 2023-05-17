@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:vm="clr-namespace:XFAppUpdate.ViewModels"
+			 x:Class="XFAppUpdate.Views.LoginView"
+			 x:Name="pg">
+
+	<ContentPage.BindingContext>
+		<vm:LoginViewModel x:Name="vm" />
+	</ContentPage.BindingContext>
+
+	<ContentPage.Content>
+		<Grid Margin="30,0,30,0"
+			  Padding="0,0,0,0"
+			  ColumnSpacing="0"
+			  RowSpacing="0">
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="50" />
+				<RowDefinition Height="50" />
+				<RowDefinition Height="50" />
+				<RowDefinition Height="50" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<Grid Grid.Row="0" Grid.Column="0">
+				<Label Text="아이디" VerticalOptions="CenterAndExpand"/>
+			</Grid>
+
+			<Grid Grid.Row="0" Grid.Column="1">
+				<Entry ClearButtonVisibility="WhileEditing"
+					   IsEnabled="{Binding IsControlEnable}"
+					   ReturnType="Next"
+					   Text="{Binding Id}"
+					   HorizontalOptions="FillAndExpand"
+					   VerticalOptions="CenterAndExpand"/>
+			</Grid>
+
+			<Grid Grid.Row="1" Grid.Column="0">
+				<Label Text="비밀번호" VerticalOptions="CenterAndExpand"/>
+			</Grid>
+
+			<Grid Grid.Row="1" Grid.Column="1">
+				<Entry ClearButtonVisibility="WhileEditing"
+					   IsEnabled="{Binding IsControlEnable}"
+					   IsPassword="True"
+					   ReturnType="Done"
+					   ReturnCommand="{Binding LoginCommand}"
+					   ReturnCommandParameter="{x:Reference Name=pg}"                       
+					   Text="{Binding Password}"
+					   HorizontalOptions="FillAndExpand"
+					   VerticalOptions="CenterAndExpand"/>
+			</Grid>
+
+			<Grid Grid.Row="2" Grid.ColumnSpan="2">
+				<Button Command="{Binding LoginCommand}"
+						CommandParameter="{x:Reference Name=pg}"
+						Text="로그인" />
+
+			</Grid>
+			
+			<Grid Grid.Row="3" Grid.ColumnSpan="2" >
+				<StackLayout HorizontalOptions="CenterAndExpand"
+							 Orientation="Horizontal" 
+							 VerticalOptions="EndAndExpand">
+					<Label x:Name="LabelVerison"/>
+				</StackLayout>
+			</Grid>
+
+			<ActivityIndicator Grid.Row="0"
+							   Grid.RowSpan="5"
+							   Grid.ColumnSpan="2"
+							   HorizontalOptions="Center"
+							   IsRunning="{Binding IsBusy}"
+							   IsVisible="{Binding IsBusy}"
+							   VerticalOptions="Center"
+							   Color="Red" />
+
+		</Grid>
+	</ContentPage.Content>
+</ContentPage>
