@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AppCenter.Crashes;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -96,23 +98,25 @@ namespace XFAppUpdate.Services
                 using (var client = new HttpClient())
                 {
                     var response = await client.GetAsync(new Uri(url));
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    versionServer = new Version(responseBody);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        versionServer = new Version(response.Content.ReadAsStringAsync().Result.ToString());
-                    }
+                    //if (response.IsSuccessStatusCode)
+                    //{
+                    //    versionServer = new Version(response.Content.ReadAsStringAsync().Result.ToString());
+                    //}
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
 
-                //var properties = new Dictionary<string, string>
-                //{
-                //    {"BaseHttpService", "SendRequestAsync" },
-                //    {"UserID", "admin"}
-                //};
-                //Crashes.TrackError(ex, properties);
+                var properties = new Dictionary<string, string>
+                {
+                    {"VersionCheck", "GetVersionServer" }
+                };
+                Crashes.TrackError(ex, properties);
             }
 
             return versionServer;
